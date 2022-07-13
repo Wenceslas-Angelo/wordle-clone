@@ -1,0 +1,11 @@
+{
+  "name": "wordle-clone",
+  "version": "1.0.0",
+  "main": "main.js",
+  "author": "Wenceslas-Angelo <wenceslasangelo@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.19.0",
+    "prettier": "^2.7.1"
+  }
+}
