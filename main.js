@@ -2,7 +2,19 @@ const messageContainer = document.querySelector('.message-container');
 const tileDisplay = document.querySelector('.tile-container');
 const keyBoard = document.querySelector('.key-container');
 
-const wordle = 'SUPER';
+let wordle = '';
+
+const getWordle = () => {
+  fetch('http://localhost:8000/word')
+    .then((response) => response.json())
+    .then((json) => {
+      wordle = json;
+    })
+    // eslint-disable-next-line no-console
+    .catch((err) => console.log(err));
+};
+
+getWordle();
 
 //prettier-ignore
 const keys = [
@@ -41,7 +53,9 @@ keys.forEach((key) => {
   const buttonElement = document.createElement('button');
   buttonElement.textContent = key;
   buttonElement.setAttribute('id', key);
-  buttonElement.addEventListener('click', () => handleKeyClick(key));
+  buttonElement.addEventListener('click', () => {
+    if (wordle) handleKeyClick(key);
+  });
   keyBoard.append(buttonElement);
 });
 
@@ -84,13 +98,13 @@ const checkRow = () => {
     const guess = guessRows[currentRow].join('');
     flipTile();
     if (guess === wordle) {
-      showMessage('Magnificent!');
+      showMessage(`Magnificent!: ${wordle}`);
       isGameOver = false;
     } else {
       currentRow += 1;
       currentTile = 0;
       if (currentRow > 5) {
-        showMessage('Game over!');
+        showMessage(`Game over!: ${wordle}`);
         isGameOver = true;
       }
     }
@@ -121,7 +135,7 @@ const flipTile = () => {
   });
 
   guess.forEach((guess) => {
-    if (guess.letter === wordle.includes(guess.letter)) {
+    if (checkWordle.includes(guess.letter)) {
       guess.color = 'yellow-overlay';
       checkWordle = checkWordle.replace(guess.letter, '');
     }
